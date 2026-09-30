@@ -897,3 +897,150 @@ body::before {
     }
 
 }
+
+/* =========================================================
+   FALLING CLICK GLITTER
+   ========================================================= */
+
+.click-glitter {
+    position: fixed;
+
+    top: -30px;
+
+    z-index: 9999;
+
+    pointer-events: none;
+    user-select: none;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    animation:
+        glitterFall var(--fall-time) linear forwards,
+        glitterSpin var(--spin-time) ease-in-out infinite;
+
+    filter:
+        drop-shadow(2px 2px 0 rgba(53, 22, 63, .35));
+}
+
+
+/* Different glitter sizes */
+
+.click-glitter.small {
+    font-size: 10px;
+}
+
+.click-glitter.medium {
+    font-size: 17px;
+}
+
+.click-glitter.large {
+    font-size: 25px;
+}
+
+
+/* Falling animation */
+
+@keyframes glitterFall {
+
+    0% {
+        transform:
+            translateY(-30px)
+            translateX(0)
+            rotate(0deg)
+            scale(.5);
+
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    45% {
+        transform:
+            translateY(45vh)
+            translateX(var(--drift))
+            rotate(150deg)
+            scale(1);
+    }
+
+    75% {
+        transform:
+            translateY(75vh)
+            translateX(calc(var(--drift) * -0.5))
+            rotate(270deg)
+            scale(.9);
+    }
+
+    100% {
+        transform:
+            translateY(110vh)
+            translateX(var(--drift))
+            rotate(360deg)
+            scale(.6);
+
+        opacity: 0;
+    }
+}
+
+
+/* Sparkle rotation */
+
+@keyframes glitterSpin {
+
+    0% {
+        filter:
+            drop-shadow(0 0 2px rgba(255,255,255,.8));
+    }
+
+    50% {
+        filter:
+            drop-shadow(0 0 9px rgba(255,255,255,1));
+    }
+
+    100% {
+        filter:
+            drop-shadow(0 0 2px rgba(255,255,255,.8));
+    }
+}
+
+
+/* Little burst when button is clicked */
+
+.click-burst {
+    position: fixed;
+
+    pointer-events: none;
+
+    z-index: 10000;
+
+    font-size: 20px;
+
+    animation: burstAnimation .5s ease-out forwards;
+}
+
+
+@keyframes burstAnimation {
+
+    0% {
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(.3)
+            rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate(
+                calc(-50% + var(--burst-x)),
+                calc(-50% + var(--burst-y))
+            )
+            scale(1.2)
+            rotate(180deg);
+    }
+}
