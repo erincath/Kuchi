@@ -1,2 +1,2 @@
 # Kuchi
-A simple unknown messaging 
+A simple cutesy calculator.
