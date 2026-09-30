@@ -1,0 +1,899 @@
+/* =========================================================
+   Y2K ANIME CALCULATOR
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Press+Start+2P&display=swap');
+
+
+/* =========================================================
+   ROOT
+   ========================================================= */
+
+:root {
+    --pink: #ff4fa3;
+    --hot-pink: #ff218c;
+    --light-pink: #ffb8dc;
+
+    --purple: #8c52ff;
+    --dark-purple: #44205f;
+
+    --cyan: #42e8ff;
+    --blue: #55aaff;
+
+    --yellow: #ffe45e;
+    --orange: #ff9d3c;
+
+    --white: #fffaff;
+    --cream: #fff4fc;
+
+    --outline: #35163f;
+
+    --shadow: #35163f;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    font-family: "Fredoka", sans-serif;
+
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,.75) 0 4px, transparent 5px),
+        radial-gradient(circle at 85% 70%, rgba(255,255,255,.65) 0 3px, transparent 4px),
+        linear-gradient(
+            135deg,
+            #ff8bc9 0%,
+            #d98cff 35%,
+            #76d9ff 70%,
+            #6bf0d2 100%
+        );
+
+    background-size:
+        80px 80px,
+        120px 120px,
+        100% 100%;
+
+    position: relative;
+}
+
+
+/* =========================================================
+   HALFTONE OVERLAY
+   ========================================================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image: radial-gradient(
+        rgba(67, 26, 83, .16) 1.2px,
+        transparent 1.2px
+    );
+
+    background-size: 12px 12px;
+
+    opacity: .55;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+   ========================================================= */
+
+.bg-decoration {
+    position: fixed;
+
+    font-weight: 700;
+
+    pointer-events: none;
+
+    user-select: none;
+
+    text-shadow:
+        3px 3px 0 var(--outline),
+        5px 5px 0 rgba(255,255,255,.5);
+}
+
+
+.deco-star {
+    color: var(--yellow);
+
+    font-size: 60px;
+
+    animation: float 4s ease-in-out infinite;
+}
+
+
+.star-1 {
+    top: 12%;
+    left: 10%;
+}
+
+
+.star-2 {
+    bottom: 15%;
+    right: 10%;
+
+    font-size: 85px;
+
+    animation-delay: 1s;
+}
+
+
+.star-3 {
+    top: 20%;
+    right: 17%;
+
+    font-size: 35px;
+
+    animation-delay: 2s;
+}
+
+
+.deco-heart {
+    color: var(--pink);
+
+    font-size: 70px;
+
+    animation: heartFloat 3s ease-in-out infinite;
+}
+
+
+.heart-1 {
+    bottom: 13%;
+    left: 13%;
+}
+
+
+.heart-2 {
+    top: 11%;
+    right: 8%;
+
+    font-size: 45px;
+
+    animation-delay: 1.2s;
+}
+
+
+/* =========================================================
+   SPARKLES
+   ========================================================= */
+
+.sparkle {
+    position: fixed;
+
+    color: white;
+
+    font-size: 25px;
+
+    text-shadow:
+        2px 2px 0 var(--purple);
+
+    pointer-events: none;
+
+    animation: sparkle 2.5s ease-in-out infinite;
+}
+
+
+.sparkle-1 {
+    top: 30%;
+    left: 20%;
+}
+
+
+.sparkle-2 {
+    bottom: 25%;
+    left: 27%;
+
+    animation-delay: .7s;
+}
+
+
+.sparkle-3 {
+    top: 35%;
+    right: 22%;
+
+    animation-delay: 1.2s;
+}
+
+
+.sparkle-4 {
+    bottom: 30%;
+    right: 20%;
+
+    animation-delay: 1.8s;
+}
+
+
+/* =========================================================
+   CALCULATOR WRAPPER
+   ========================================================= */
+
+.calculator-wrapper {
+    position: relative;
+
+    z-index: 5;
+
+    animation: calculatorEntrance .7s cubic-bezier(.2, 1.4, .5, 1);
+}
+
+
+/* =========================================================
+   CALCULATOR
+   ========================================================= */
+
+.calculator {
+    width: 370px;
+
+    padding: 22px;
+
+    border: 4px solid var(--outline);
+
+    border-radius: 32px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ff72b7,
+            #d477ff 55%,
+            #8e74ff
+        );
+
+    box-shadow:
+        8px 8px 0 var(--shadow),
+        14px 14px 0 rgba(255,255,255,.5),
+        inset 0 2px 0 rgba(255,255,255,.8);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Glossy shine */
+
+.calculator::before {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 80px;
+
+    top: -35px;
+    left: 30px;
+
+    background: rgba(255,255,255,.25);
+
+    border-radius: 50%;
+
+    transform: rotate(-12deg);
+
+    pointer-events: none;
+}
+
+
+/* Comic corner */
+
+.calculator::after {
+    content: "★";
+
+    position: absolute;
+
+    right: 14px;
+    top: 12px;
+
+    color: var(--yellow);
+
+    font-size: 25px;
+
+    text-shadow:
+        2px 2px 0 var(--outline);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.calculator-header {
+    text-align: center;
+
+    margin-bottom: 17px;
+
+    color: white;
+
+    text-shadow:
+        3px 3px 0 var(--outline);
+}
+
+
+.header-stars {
+    font-size: 11px;
+
+    color: var(--yellow);
+
+    letter-spacing: 5px;
+
+    margin-bottom: 5px;
+}
+
+
+.title {
+    font-family: "Press Start 2P", monospace;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+}
+
+
+.title span {
+    color: var(--yellow);
+
+    font-size: 14px;
+}
+
+
+.subtitle {
+    margin-top: 4px;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    font-weight: 700;
+
+    color: var(--cream);
+}
+
+
+/* =========================================================
+   DISPLAY
+   ========================================================= */
+
+.display-container {
+    position: relative;
+
+    padding: 17px 16px 12px;
+
+    margin-bottom: 17px;
+
+    min-height: 105px;
+
+    border: 4px solid var(--outline);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #d8ffff,
+            #81efff
+        );
+
+    box-shadow:
+        inset 4px 4px 0 rgba(255,255,255,.85),
+        inset -4px -4px 0 rgba(54,110,150,.3),
+        5px 5px 0 var(--shadow);
+
+    overflow: hidden;
+}
+
+
+.display-sparkle {
+    position: absolute;
+
+    top: 8px;
+    right: 12px;
+
+    color: white;
+
+    font-size: 17px;
+
+    text-shadow:
+        1px 1px 0 var(--purple);
+
+    animation: sparkle 2s infinite;
+}
+
+
+.history {
+    min-height: 18px;
+
+    text-align: right;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #527b8b;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+}
+
+
+.display {
+    margin-top: 3px;
+
+    text-align: right;
+
+    font-family: "Fredoka", sans-serif;
+
+    font-size: 39px;
+
+    font-weight: 700;
+
+    color: var(--dark-purple);
+
+    text-shadow:
+        2px 2px 0 rgba(255,255,255,.8);
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.display.pop {
+    animation: displayPop .22s ease;
+}
+
+
+/* =========================================================
+   BUTTON GRID
+   ========================================================= */
+
+.buttons {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   BUTTON BASE
+   ========================================================= */
+
+.btn {
+    height: 58px;
+
+    border: 3px solid var(--outline);
+
+    border-radius: 17px;
+
+    font-family: "Fredoka", sans-serif;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    color: var(--dark-purple);
+
+    cursor: pointer;
+
+    position: relative;
+
+    box-shadow:
+        4px 5px 0 var(--shadow),
+        inset 2px 2px 0 rgba(255,255,255,.8);
+
+    transition:
+        transform .12s ease,
+        box-shadow .12s ease,
+        filter .12s ease;
+
+    overflow: hidden;
+}
+
+
+/* Button shine */
+
+.btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 4px;
+    left: 9px;
+    right: 9px;
+
+    height: 9px;
+
+    background: rgba(255,255,255,.4);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   NUMBER BUTTONS
+   ========================================================= */
+
+.number {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #ffd8ed
+        );
+}
+
+
+.number:hover {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fff0f8
+        );
+}
+
+
+/* =========================================================
+   FUNCTION BUTTONS
+   ========================================================= */
+
+.function {
+    background:
+        linear-gradient(
+            145deg,
+            #ffe96a,
+            #ffba45
+        );
+
+    font-size: 16px;
+}
+
+
+.function:hover {
+    filter: brightness(1.08);
+}
+
+
+/* =========================================================
+   OPERATOR BUTTONS
+   ========================================================= */
+
+.operator {
+    background:
+        linear-gradient(
+            145deg,
+            #6ff4ff,
+            #45bfff
+        );
+
+    color: #26365f;
+
+    font-size: 27px;
+}
+
+
+.operator:hover {
+    filter: brightness(1.1);
+}
+
+
+/* =========================================================
+   EQUALS
+   ========================================================= */
+
+.equals {
+    background:
+        linear-gradient(
+            145deg,
+            #ff72bb,
+            #ff3e91
+        );
+
+    color: white;
+
+    font-size: 28px;
+
+    text-shadow:
+        2px 2px 0 var(--outline);
+}
+
+
+.equals:hover {
+    filter: brightness(1.1);
+}
+
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
+.clear {
+    background:
+        linear-gradient(
+            145deg,
+            #ff91c8,
+            #ff4e9e
+        );
+
+    color: white;
+
+    text-shadow:
+        2px 2px 0 var(--outline);
+}
+
+
+/* =========================================================
+   BUTTON INTERACTION
+   ========================================================= */
+
+.btn:hover {
+    transform: translateY(-3px) rotate(-1deg);
+
+    box-shadow:
+        5px 8px 0 var(--shadow),
+        inset 2px 2px 0 rgba(255,255,255,.8);
+}
+
+
+.btn:active,
+.btn.pressed {
+    transform:
+        translateY(4px)
+        scale(.95)
+        rotate(1deg);
+
+    box-shadow:
+        1px 2px 0 var(--shadow),
+        inset 2px 2px 0 rgba(255,255,255,.7);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.calculator-footer {
+    text-align: center;
+
+    margin-top: 17px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    color: white;
+
+    text-shadow:
+        2px 2px 0 var(--outline);
+}
+
+
+/* =========================================================
+   COPYRIGHT
+   ========================================================= */
+
+.copyright {
+    position: fixed;
+
+    bottom: 12px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 10;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color: white;
+
+    text-shadow:
+        2px 2px 0 var(--outline);
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(8deg);
+    }
+}
+
+
+@keyframes heartFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg) scale(1);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(6deg) scale(1.08);
+    }
+}
+
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: .35;
+
+        transform:
+            scale(.8)
+            rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+
+        transform:
+            scale(1.3)
+            rotate(20deg);
+    }
+}
+
+
+@keyframes calculatorEntrance {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translateY(50px)
+            scale(.85)
+            rotate(-3deg);
+    }
+
+    70% {
+        transform:
+            translateY(-8px)
+            scale(1.02)
+            rotate(1deg);
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1)
+            rotate(0);
+    }
+}
+
+
+@keyframes displayPop {
+
+    0% {
+        transform: scale(.9);
+        opacity: .5;
+    }
+
+    70% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    50% {
+        transform: translateX(4px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+}
+
+
+.shake {
+    animation: shake .25s ease;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px;
+
+        overflow-y: auto;
+    }
+
+
+    .calculator {
+        width: min(370px, 92vw);
+
+        padding: 17px;
+
+        border-radius: 27px;
+    }
+
+
+    .btn {
+        height: 55px;
+
+        border-radius: 15px;
+    }
+
+
+    .display {
+        font-size: 34px;
+    }
+
+
+    .deco-star,
+    .deco-heart,
+    .sparkle {
+        opacity: .5;
+    }
+}
+
+
+@media (max-height: 700px) {
+
+    .calculator {
+        transform: scale(.88);
+    }
+
+}
