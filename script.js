@@ -695,3 +695,304 @@ document.head.appendChild(resultStyle);
    ========================================================= */
 
 updateDisplay();
+
+/* =========================================================
+   FALLING Y2K GLITTER EFFECT
+   ========================================================= */
+
+const glitterCharacters = [
+    "✦",
+    "✧",
+    "★",
+    "☆",
+    "⋆",
+    "✩",
+    "♡",
+    "♥",
+    "◆",
+    "◇",
+    "✿"
+];
+
+
+const glitterColors = [
+    "#ff4fa3",
+    "#ffeb5c",
+    "#ffffff",
+    "#62eaff",
+    "#a875ff",
+    "#ff8bd4"
+];
+
+
+/* =========================================================
+   CREATE FALLING GLITTER
+   ========================================================= */
+
+function createFallingGlitter() {
+
+    /*
+     * Create several particles at once
+     * so it feels like glitter is raining.
+     */
+
+    const amount = 10;
+
+
+    for (let i = 0; i < amount; i++) {
+
+        const glitter =
+            document.createElement("div");
+
+
+        glitter.classList.add("click-glitter");
+
+
+        /* Random size */
+
+        const sizes = [
+            "small",
+            "medium",
+            "large"
+        ];
+
+        glitter.classList.add(
+            sizes[
+                Math.floor(
+                    Math.random() * sizes.length
+                )
+            ]
+        );
+
+
+        /* Random symbol */
+
+        glitter.textContent =
+            glitterCharacters[
+                Math.floor(
+                    Math.random() *
+                    glitterCharacters.length
+                )
+            ];
+
+
+        /* Random color */
+
+        glitter.style.color =
+            glitterColors[
+                Math.floor(
+                    Math.random() *
+                    glitterColors.length
+                )
+            ];
+
+
+        /*
+         * Random horizontal position
+         */
+
+        glitter.style.left =
+            Math.random() * 100 + "vw";
+
+
+        /*
+         * Random falling duration
+         */
+
+        const fallTime =
+            2.5 + Math.random() * 2.5;
+
+        glitter.style.setProperty(
+            "--fall-time",
+            fallTime + "s"
+        );
+
+
+        /*
+         * Random rotation speed
+         */
+
+        glitter.style.setProperty(
+            "--spin-time",
+            (1 + Math.random() * 2) + "s"
+        );
+
+
+        /*
+         * Random sideways movement
+         */
+
+        const drift =
+            -100 + Math.random() * 200;
+
+        glitter.style.setProperty(
+            "--drift",
+            drift + "px"
+        );
+
+
+        /*
+         * Slight random delay
+         */
+
+        glitter.style.animationDelay =
+            (Math.random() * .35) + "s";
+
+
+        document.body.appendChild(glitter);
+
+
+        /*
+         * Remove after animation
+         */
+
+        setTimeout(() => {
+
+            glitter.remove();
+
+        }, (fallTime + .5) * 1000);
+
+    }
+
+}
+
+
+/* =========================================================
+   BUTTON CLICK BURST
+   ========================================================= */
+
+function createClickBurst(button) {
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    const burstCharacters = [
+        "✦",
+        "✧",
+        "★",
+        "♡"
+    ];
+
+
+    for (let i = 0; i < 5; i++) {
+
+        const particle =
+            document.createElement("div");
+
+
+        particle.classList.add(
+            "click-burst"
+        );
+
+
+        particle.textContent =
+            burstCharacters[
+                Math.floor(
+                    Math.random() *
+                    burstCharacters.length
+                )
+            ];
+
+
+        particle.style.color =
+            glitterColors[
+                Math.floor(
+                    Math.random() *
+                    glitterColors.length
+                )
+            ];
+
+
+        particle.style.left =
+            rect.left +
+            rect.width / 2 +
+            "px";
+
+
+        particle.style.top =
+            rect.top +
+            rect.height / 2 +
+            "px";
+
+
+        /*
+         * Random direction
+         */
+
+        const angle =
+            Math.random() *
+            Math.PI * 2;
+
+
+        const distance =
+            30 + Math.random() * 45;
+
+
+        const x =
+            Math.cos(angle) *
+            distance;
+
+
+        const y =
+            Math.sin(angle) *
+            distance;
+
+
+        particle.style.setProperty(
+            "--burst-x",
+            x + "px"
+        );
+
+
+        particle.style.setProperty(
+            "--burst-y",
+            y + "px"
+        );
+
+
+        document.body.appendChild(
+            particle
+        );
+
+
+        setTimeout(() => {
+
+            particle.remove();
+
+        }, 600);
+
+    }
+
+}
+
+
+/* =========================================================
+   ACTIVATE EFFECT ON CALCULATOR BUTTONS
+   ========================================================= */
+
+document
+    .querySelectorAll(".btn")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                /*
+                 * Small burst from the button
+                 */
+
+                createClickBurst(button);
+
+
+                /*
+                 * Glitter starts falling
+                 */
+
+                createFallingGlitter();
+
+            }
+        );
+
+    });
