@@ -2,13 +2,29 @@
    Y2K ANIME CALCULATOR
    ========================================================= */
 
-const display = document.getElementById("display");
-const historyDisplay = document.getElementById("history");
-const calculator = document.querySelector(".calculator");
 
-const numberButtons = document.querySelectorAll(".number");
-const operatorButtons = document.querySelectorAll(".operator");
-const actionButtons = document.querySelectorAll("[data-action]");
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const display =
+    document.getElementById("display");
+
+const historyDisplay =
+    document.getElementById("history");
+
+const calculator =
+    document.querySelector(".calculator");
+
+
+const numberButtons =
+    document.querySelectorAll(".number");
+
+const operatorButtons =
+    document.querySelectorAll(".operator");
+
+const actionButtons =
+    document.querySelectorAll("[data-action]");
 
 
 /* =========================================================
@@ -16,10 +32,45 @@ const actionButtons = document.querySelectorAll("[data-action]");
    ========================================================= */
 
 let currentValue = "0";
+
 let previousValue = null;
+
 let operator = null;
+
 let waitingForOperand = false;
-let expression = "";
+
+
+/* =========================================================
+   Y2K PARTICLES
+   ========================================================= */
+
+const glitterCharacters = [
+
+    "✦",
+    "✧",
+    "★",
+    "☆",
+    "⋆",
+    "✩",
+    "♡",
+    "♥",
+    "◆",
+    "◇",
+    "✿"
+
+];
+
+
+const glitterColors = [
+
+    "#ff4fa3",
+    "#ffeb5c",
+    "#ffffff",
+    "#62eaff",
+    "#a875ff",
+    "#ff8bd4"
+
+];
 
 
 /* =========================================================
@@ -28,48 +79,79 @@ let expression = "";
 
 function updateDisplay() {
 
-    display.textContent = formatNumber(currentValue);
+    display.textContent =
+        formatNumber(currentValue);
+
 
     display.classList.remove("pop");
 
+
     void display.offsetWidth;
+
 
     display.classList.add("pop");
 }
 
 
 /* =========================================================
-   FORMAT NUMBERS
+   FORMAT NUMBER
    ========================================================= */
 
 function formatNumber(value) {
 
     if (value === "Error") {
+
         return "ERROR";
     }
 
+
     if (value === "") {
+
         return "0";
     }
 
-    const number = Number(value);
+
+    const number =
+        Number(value);
+
 
     if (!Number.isFinite(number)) {
+
         return "ERROR";
     }
 
+
     if (Math.abs(number) >= 1e12) {
+
         return number.toExponential(6);
     }
 
+
     if (value.includes(".")) {
-        const [integer, decimal] = value.split(".");
+
+        const parts =
+            value.split(".");
+
+
+        const integer =
+            parts[0];
+
+        const decimal =
+            parts[1];
+
 
         const formattedInteger =
-            Number(integer).toLocaleString("en-US");
+            Number(integer)
+                .toLocaleString("en-US");
 
-        return `${formattedInteger}.${decimal}`;
+
+        return (
+            formattedInteger +
+            "." +
+            decimal
+        );
     }
+
 
     return number.toLocaleString("en-US");
 }
@@ -82,25 +164,32 @@ function formatNumber(value) {
 function inputNumber(number) {
 
     if (currentValue === "Error") {
+
         clearCalculator();
     }
 
 
     if (waitingForOperand) {
 
-        currentValue = number;
+        currentValue =
+            number;
 
-        waitingForOperand = false;
+        waitingForOperand =
+            false;
 
     } else {
 
         if (currentValue === "0") {
-            currentValue = number;
+
+            currentValue =
+                number;
+
         } else {
+
             currentValue += number;
         }
-
     }
+
 
     updateDisplay();
 }
@@ -113,42 +202,54 @@ function inputNumber(number) {
 function inputDecimal() {
 
     if (currentValue === "Error") {
+
         clearCalculator();
     }
 
 
     if (waitingForOperand) {
 
-        currentValue = "0.";
-        waitingForOperand = false;
+        currentValue =
+            "0.";
 
-    } else if (!currentValue.includes(".")) {
+        waitingForOperand =
+            false;
+
+    } else if (
+        !currentValue.includes(".")
+    ) {
 
         currentValue += ".";
-
     }
+
 
     updateDisplay();
 }
 
 
 /* =========================================================
-   OPERATOR
+   CHOOSE OPERATOR
    ========================================================= */
 
 function chooseOperator(nextOperator) {
 
     if (currentValue === "Error") {
+
         return;
     }
 
 
-    const inputValue = Number(currentValue);
+    const inputValue =
+        Number(currentValue);
 
 
-    if (operator && waitingForOperand) {
+    if (
+        operator &&
+        waitingForOperand
+    ) {
 
-        operator = nextOperator;
+        operator =
+            nextOperator;
 
         updateHistory();
 
@@ -158,15 +259,17 @@ function chooseOperator(nextOperator) {
 
     if (previousValue === null) {
 
-        previousValue = inputValue;
+        previousValue =
+            inputValue;
 
     } else if (operator) {
 
-        const result = calculate(
-            previousValue,
-            inputValue,
-            operator
-        );
+        const result =
+            calculate(
+                previousValue,
+                inputValue,
+                operator
+            );
 
 
         if (result === "Error") {
@@ -177,16 +280,22 @@ function chooseOperator(nextOperator) {
         }
 
 
-        currentValue = String(result);
+        currentValue =
+            String(result);
 
-        previousValue = result;
 
+        previousValue =
+            result;
     }
 
 
-    operator = nextOperator;
+    operator =
+        nextOperator;
 
-    waitingForOperand = true;
+
+    waitingForOperand =
+        true;
+
 
     updateHistory();
 }
@@ -196,35 +305,48 @@ function chooseOperator(nextOperator) {
    CALCULATE
    ========================================================= */
 
-function calculate(first, second, operation) {
+function calculate(
+    first,
+    second,
+    operation
+) {
 
     switch (operation) {
 
         case "+":
+
             return first + second;
 
+
         case "-":
+
             return first - second;
 
+
         case "*":
+
             return first * second;
+
 
         case "/":
 
             if (second === 0) {
+
                 return "Error";
             }
 
             return first / second;
 
+
         default:
+
             return second;
     }
 }
 
 
 /* =========================================================
-   EQUALS
+   CALCULATE RESULT
    ========================================================= */
 
 function calculateResult() {
@@ -234,18 +356,21 @@ function calculateResult() {
         previousValue === null ||
         currentValue === "Error"
     ) {
+
         return;
     }
 
 
-    const secondValue = Number(currentValue);
+    const secondValue =
+        Number(currentValue);
 
 
-    const result = calculate(
-        previousValue,
-        secondValue,
-        operator
-    );
+    const result =
+        calculate(
+            previousValue,
+            secondValue,
+            operator
+        );
 
 
     if (result === "Error") {
@@ -257,29 +382,53 @@ function calculateResult() {
 
 
     const oldExpression =
-        `${formatNumber(String(previousValue))} ${getOperatorSymbol(operator)} ${formatNumber(String(secondValue))}`;
+        `${formatNumber(
+            String(previousValue)
+        )} ${getOperatorSymbol(
+            operator
+        )} ${formatNumber(
+            String(secondValue)
+        )}`;
 
 
     historyDisplay.textContent =
         `${oldExpression} =`;
 
 
-    currentValue = String(
-        Number(result.toFixed(12))
-    );
+    currentValue =
+        String(
+            Number(
+                result.toFixed(12)
+            )
+        );
 
 
-    previousValue = null;
-    operator = null;
-    waitingForOperand = true;
+    previousValue =
+        null;
+
+
+    operator =
+        null;
+
+
+    waitingForOperand =
+        true;
+
 
     updateDisplay();
 
 
-    calculator.classList.add("result-bounce");
+    calculator.classList.add(
+        "result-bounce"
+    );
+
 
     setTimeout(() => {
-        calculator.classList.remove("result-bounce");
+
+        calculator.classList.remove(
+            "result-bounce"
+        );
+
     }, 300);
 }
 
@@ -288,21 +437,32 @@ function calculateResult() {
    OPERATOR SYMBOL
    ========================================================= */
 
-function getOperatorSymbol(operation) {
+function getOperatorSymbol(
+    operation
+) {
 
     const symbols = {
+
         "+": "+",
+
         "-": "−",
+
         "*": "×",
+
         "/": "÷"
+
     };
 
-    return symbols[operation] || operation;
+
+    return (
+        symbols[operation] ||
+        operation
+    );
 }
 
 
 /* =========================================================
-   HISTORY
+   UPDATE HISTORY
    ========================================================= */
 
 function updateHistory() {
@@ -313,8 +473,11 @@ function updateHistory() {
     ) {
 
         historyDisplay.textContent =
-            `${formatNumber(String(previousValue))} ${getOperatorSymbol(operator)}`;
-
+            `${formatNumber(
+                String(previousValue)
+            )} ${
+                getOperatorSymbol(operator)
+            }`;
     }
 }
 
@@ -325,29 +488,48 @@ function updateHistory() {
 
 function clearCalculator() {
 
-    currentValue = "0";
+    currentValue =
+        "0";
 
-    previousValue = null;
 
-    operator = null;
+    previousValue =
+        null;
 
-    waitingForOperand = false;
 
-    expression = "";
+    operator =
+        null;
 
-    historyDisplay.textContent = "";
+
+    waitingForOperand =
+        false;
+
+
+    historyDisplay.textContent =
+        "";
+
 
     updateDisplay();
 
 
-    calculator.classList.remove("shake");
+    calculator.classList.remove(
+        "shake"
+    );
+
 
     void calculator.offsetWidth;
 
-    calculator.classList.add("shake");
+
+    calculator.classList.add(
+        "shake"
+    );
+
 
     setTimeout(() => {
-        calculator.classList.remove("shake");
+
+        calculator.classList.remove(
+            "shake"
+        );
+
     }, 250);
 }
 
@@ -358,20 +540,27 @@ function clearCalculator() {
 
 function deleteNumber() {
 
-    if (waitingForOperand || currentValue === "Error") {
+    if (
+        waitingForOperand ||
+        currentValue === "Error"
+    ) {
+
         return;
     }
 
 
     if (currentValue.length <= 1) {
 
-        currentValue = "0";
+        currentValue =
+            "0";
 
     } else {
 
         currentValue =
-            currentValue.slice(0, -1);
-
+            currentValue.slice(
+                0,
+                -1
+            );
     }
 
 
@@ -386,13 +575,20 @@ function deleteNumber() {
 function percentage() {
 
     if (currentValue === "Error") {
+
         return;
     }
 
 
-    const value = Number(currentValue);
+    const value =
+        Number(currentValue);
 
-    currentValue = String(value / 100);
+
+    currentValue =
+        String(
+            value / 100
+        );
+
 
     updateDisplay();
 }
@@ -408,6 +604,7 @@ function toggleSign() {
         currentValue === "0" ||
         currentValue === "Error"
     ) {
+
         return;
     }
 
@@ -428,338 +625,92 @@ function toggleSign() {
 
 function showError() {
 
-    currentValue = "Error";
+    currentValue =
+        "Error";
 
-    previousValue = null;
 
-    operator = null;
+    previousValue =
+        null;
 
-    waitingForOperand = true;
+
+    operator =
+        null;
+
+
+    waitingForOperand =
+        true;
+
 
     updateDisplay();
 
 
-    calculator.classList.remove("shake");
+    calculator.classList.remove(
+        "shake"
+    );
+
 
     void calculator.offsetWidth;
 
-    calculator.classList.add("shake");
+
+    calculator.classList.add(
+        "shake"
+    );
+
 
     setTimeout(() => {
-        calculator.classList.remove("shake");
+
+        calculator.classList.remove(
+            "shake"
+        );
+
     }, 250);
 }
 
 
 /* =========================================================
-   BUTTON CLICK EVENTS
-   ========================================================= */
-
-numberButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        if (button.dataset.number) {
-
-            inputNumber(
-                button.dataset.number
-            );
-
-        } else if (
-            button.dataset.action === "decimal"
-        ) {
-
-            inputDecimal();
-
-        }
-
-    });
-
-});
-
-
-operatorButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        chooseOperator(
-            button.dataset.operator
-        );
-
-    });
-
-});
-
-
-actionButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        const action =
-            button.dataset.action;
-
-
-        switch (action) {
-
-            case "clear":
-                clearCalculator();
-                break;
-
-            case "delete":
-                deleteNumber();
-                break;
-
-            case "percent":
-                percentage();
-                break;
-
-            case "sign":
-                toggleSign();
-                break;
-
-            case "equals":
-                calculateResult();
-                break;
-
-        }
-
-    });
-
-});
-
-
-/* =========================================================
-   KEYBOARD SUPPORT
-   ========================================================= */
-
-document.addEventListener("keydown", event => {
-
-    const key = event.key;
-
-
-    if (/^[0-9]$/.test(key)) {
-
-        inputNumber(key);
-
-        pressMatchingButton(
-            `[data-number="${key}"]`
-        );
-
-        return;
-    }
-
-
-    if (key === ".") {
-
-        inputDecimal();
-
-        pressMatchingButton(
-            `[data-action="decimal"]`
-        );
-
-        return;
-    }
-
-
-    if (
-        key === "+" ||
-        key === "-" ||
-        key === "*" ||
-        key === "/"
-    ) {
-
-        chooseOperator(key);
-
-        pressMatchingButton(
-            `[data-operator="${key}"]`
-        );
-
-        return;
-    }
-
-
-    if (key === "Enter" || key === "=") {
-
-        calculateResult();
-
-        pressMatchingButton(
-            `[data-action="equals"]`
-        );
-
-        return;
-    }
-
-
-    if (key === "Escape") {
-
-        clearCalculator();
-
-        pressMatchingButton(
-            `[data-action="clear"]`
-        );
-
-        return;
-    }
-
-
-    if (key === "Backspace") {
-
-        deleteNumber();
-
-        pressMatchingButton(
-            `[data-action="delete"]`
-        );
-
-        return;
-    }
-
-
-    if (key === "%") {
-
-        percentage();
-
-        pressMatchingButton(
-            `[data-action="percent"]`
-        );
-
-    }
-
-});
-
-
-/* =========================================================
-   BUTTON PRESS ANIMATION
-   ========================================================= */
-
-function pressMatchingButton(selector) {
-
-    const button =
-        document.querySelector(selector);
-
-
-    if (!button) {
-        return;
-    }
-
-
-    button.classList.add("pressed");
-
-
-    setTimeout(() => {
-
-        button.classList.remove("pressed");
-
-    }, 120);
-}
-
-
-/* =========================================================
-   EXTRA RESULT ANIMATION
-   ========================================================= */
-
-const resultStyle = document.createElement("style");
-
-resultStyle.textContent = `
-
-    .result-bounce {
-        animation: resultBounce .3s ease;
-    }
-
-    @keyframes resultBounce {
-
-        0% {
-            transform: scale(1);
-        }
-
-        45% {
-            transform: scale(1.035) rotate(-1deg);
-        }
-
-        75% {
-            transform: scale(.99) rotate(1deg);
-        }
-
-        100% {
-            transform: scale(1);
-        }
-
-    }
-
-`;
-
-document.head.appendChild(resultStyle);
-
-
-/* =========================================================
-   INITIAL DISPLAY
-   ========================================================= */
-
-updateDisplay();
-
-/* =========================================================
-   FALLING Y2K GLITTER EFFECT
-   ========================================================= */
-
-const glitterCharacters = [
-    "✦",
-    "✧",
-    "★",
-    "☆",
-    "⋆",
-    "✩",
-    "♡",
-    "♥",
-    "◆",
-    "◇",
-    "✿"
-];
-
-
-const glitterColors = [
-    "#ff4fa3",
-    "#ffeb5c",
-    "#ffffff",
-    "#62eaff",
-    "#a875ff",
-    "#ff8bd4"
-];
-
-
-/* =========================================================
-   CREATE FALLING GLITTER
+   FALLING GLITTER
    ========================================================= */
 
 function createFallingGlitter() {
 
     /*
-     * Create several particles at once
-     * so it feels like glitter is raining.
+     * Number of falling particles.
      */
 
     const amount = 10;
 
 
-    for (let i = 0; i < amount; i++) {
+    for (
+        let i = 0;
+        i < amount;
+        i++
+    ) {
 
         const glitter =
             document.createElement("div");
 
 
-        glitter.classList.add("click-glitter");
+        glitter.classList.add(
+            "click-glitter"
+        );
 
 
         /* Random size */
 
         const sizes = [
+
             "small",
             "medium",
             "large"
+
         ];
+
 
         glitter.classList.add(
             sizes[
                 Math.floor(
-                    Math.random() * sizes.length
+                    Math.random() *
+                    sizes.length
                 )
             ]
         );
@@ -787,20 +738,19 @@ function createFallingGlitter() {
             ];
 
 
-        /*
-         * Random horizontal position
-         */
+        /* Random horizontal position */
 
         glitter.style.left =
-            Math.random() * 100 + "vw";
+            Math.random() * 100 +
+            "vw";
 
 
-        /*
-         * Random falling duration
-         */
+        /* Random falling duration */
 
         const fallTime =
-            2.5 + Math.random() * 2.5;
+            2.5 +
+            Math.random() * 2.5;
+
 
         glitter.style.setProperty(
             "--fall-time",
@@ -808,22 +758,23 @@ function createFallingGlitter() {
         );
 
 
-        /*
-         * Random rotation speed
-         */
+        /* Random spin */
 
         glitter.style.setProperty(
             "--spin-time",
-            (1 + Math.random() * 2) + "s"
+            (
+                1 +
+                Math.random() * 2
+            ) + "s"
         );
 
 
-        /*
-         * Random sideways movement
-         */
+        /* Random sideways drift */
 
         const drift =
-            -100 + Math.random() * 200;
+            -100 +
+            Math.random() * 200;
+
 
         glitter.style.setProperty(
             "--drift",
@@ -831,34 +782,32 @@ function createFallingGlitter() {
         );
 
 
-        /*
-         * Slight random delay
-         */
+        /* Random animation delay */
 
         glitter.style.animationDelay =
-            (Math.random() * .35) + "s";
+            (
+                Math.random() * .35
+            ) + "s";
 
 
-        document.body.appendChild(glitter);
+        document.body.appendChild(
+            glitter
+        );
 
 
-        /*
-         * Remove after animation
-         */
+        /* Remove particle */
 
         setTimeout(() => {
 
             glitter.remove();
 
         }, (fallTime + .5) * 1000);
-
     }
-
 }
 
 
 /* =========================================================
-   BUTTON CLICK BURST
+   CLICK BURST
    ========================================================= */
 
 function createClickBurst(button) {
@@ -868,14 +817,20 @@ function createClickBurst(button) {
 
 
     const burstCharacters = [
+
         "✦",
         "✧",
         "★",
         "♡"
+
     ];
 
 
-    for (let i = 0; i < 5; i++) {
+    for (
+        let i = 0;
+        i < 5;
+        i++
+    ) {
 
         const particle =
             document.createElement("div");
@@ -916,17 +871,18 @@ function createClickBurst(button) {
             "px";
 
 
-        /*
-         * Random direction
-         */
+        /* Random direction */
 
         const angle =
             Math.random() *
-            Math.PI * 2;
+            Math.PI *
+            2;
 
 
         const distance =
-            30 + Math.random() * 45;
+            30 +
+            Math.random() *
+            45;
 
 
         const x =
@@ -961,38 +917,333 @@ function createClickBurst(button) {
             particle.remove();
 
         }, 600);
-
     }
-
 }
 
 
 /* =========================================================
-   ACTIVATE EFFECT ON CALCULATOR BUTTONS
+   BUTTON CLICK EVENTS
    ========================================================= */
 
-document
-    .querySelectorAll(".btn")
-    .forEach(button => {
+numberButtons.forEach(
+    button => {
 
         button.addEventListener(
             "click",
             () => {
 
-                /*
-                 * Small burst from the button
-                 */
+                if (
+                    button.dataset.number
+                ) {
 
-                createClickBurst(button);
+                    inputNumber(
+                        button.dataset.number
+                    );
+
+                } else if (
+                    button.dataset.action ===
+                    "decimal"
+                ) {
+
+                    inputDecimal();
+                }
 
 
-                /*
-                 * Glitter starts falling
-                 */
+                createClickBurst(
+                    button
+                );
+
 
                 createFallingGlitter();
-
             }
         );
+    }
+);
 
-    });
+
+/* =========================================================
+   OPERATOR BUTTONS
+   ========================================================= */
+
+operatorButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                chooseOperator(
+                    button.dataset.operator
+                );
+
+
+                createClickBurst(
+                    button
+                );
+
+
+                createFallingGlitter();
+            }
+        );
+    }
+);
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+actionButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const action =
+                    button.dataset.action;
+
+
+                switch (action) {
+
+                    case "clear":
+
+                        clearCalculator();
+
+                        break;
+
+
+                    case "delete":
+
+                        deleteNumber();
+
+                        break;
+
+
+                    case "percent":
+
+                        percentage();
+
+                        break;
+
+
+                    case "sign":
+
+                        toggleSign();
+
+                        break;
+
+
+                    case "equals":
+
+                        calculateResult();
+
+                        break;
+                }
+
+
+                createClickBurst(
+                    button
+                );
+
+
+                createFallingGlitter();
+            }
+        );
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD SUPPORT
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const key =
+            event.key;
+
+
+        /* Numbers */
+
+        if (/^[0-9]$/.test(key)) {
+
+            inputNumber(key);
+
+
+            pressMatchingButton(
+                `[data-number="${key}"]`
+            );
+
+
+            createFallingGlitter();
+
+
+            return;
+        }
+
+
+        /* Decimal */
+
+        if (key === ".") {
+
+            inputDecimal();
+
+
+            pressMatchingButton(
+                `[data-action="decimal"]`
+            );
+
+
+            createFallingGlitter();
+
+
+            return;
+        }
+
+
+        /* Operators */
+
+        if (
+            key === "+" ||
+            key === "-" ||
+            key === "*" ||
+            key === "/"
+        ) {
+
+            chooseOperator(key);
+
+
+            pressMatchingButton(
+                `[data-operator="${key}"]`
+            );
+
+
+            createFallingGlitter();
+
+
+            return;
+        }
+
+
+        /* Equals */
+
+        if (
+            key === "Enter" ||
+            key === "="
+        ) {
+
+            calculateResult();
+
+
+            pressMatchingButton(
+                `[data-action="equals"]`
+            );
+
+
+            createFallingGlitter();
+
+
+            return;
+        }
+
+
+        /* Clear */
+
+        if (key === "Escape") {
+
+            clearCalculator();
+
+
+            pressMatchingButton(
+                `[data-action="clear"]`
+            );
+
+
+            createFallingGlitter();
+
+
+            return;
+        }
+
+
+        /* Delete */
+
+        if (key === "Backspace") {
+
+            deleteNumber();
+
+
+            pressMatchingButton(
+                `[data-action="delete"]`
+            );
+
+
+            createFallingGlitter();
+
+
+            return;
+        }
+
+
+        /* Percentage */
+
+        if (key === "%") {
+
+            percentage();
+
+
+            pressMatchingButton(
+                `[data-action="percent"]`
+            );
+
+
+            createFallingGlitter();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD BUTTON ANIMATION
+   ========================================================= */
+
+function pressMatchingButton(
+    selector
+) {
+
+    const button =
+        document.querySelector(
+            selector
+        );
+
+
+    if (!button) {
+
+        return;
+    }
+
+
+    button.classList.add(
+        "pressed"
+    );
+
+
+    setTimeout(() => {
+
+        button.classList.remove(
+            "pressed"
+        );
+
+    }, 120);
+}
+
+
+/* =========================================================
+   INITIAL DISPLAY
+   ========================================================= */
+
+updateDisplay();
